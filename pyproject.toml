@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thalesians.adiutor"
+version = "0.0.1"
+authors = [
+	{ name="Paul Alexander Bilokon", email="paul@thalesians.com" },
+	{ name="Abir Sridi", email="abir.sridi@thalesians.com" },
+]
+description = "The Thalesians' AI library"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/thalesians/adiutor/"
+Issues = "https://github.com/thalesians/adiutor/issues"
