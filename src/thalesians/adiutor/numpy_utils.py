@@ -1,3 +1,157 @@
+"""
+thalesians.adiutor.numpy_utils
+==============================
+
+This module provides an extensive set of utilities for working with NumPy arrays. 
+It includes functions for array manipulation, dimensionality adjustments, symmetry enforcement, 
+and vectorized operations. The utilities are designed to enhance flexibility and efficiency when 
+working with numerical data.
+
+Key Features
+------------
+1. **Dimensionality Utilities**:
+   - Convert arrays to specific dimensions (`to_ndim_1`, `to_ndim_2`).
+   - Create rows, columns, and matrices with specified values or dimensions.
+
+2. **Symmetry Operations**:
+   - Enforce lower or upper triangular symmetry in arrays.
+
+3. **Array Properties**:
+   - Check if arrays are views of each other.
+   - Extract row and column counts (`nrow`, `ncol`).
+
+4. **Vectorized Operations**:
+   - Decorate functions for vectorized behavior.
+   - Efficiently apply functions to arrays (`apply`).
+
+5. **Matrix Utilities**:
+   - Perform Kronecker sums.
+   - Reshape arrays with vectorization (`vec`, `unvec`).
+
+6. **Top-N Retention**:
+   - Retain the largest `n` elements in an array while zeroing out the rest.
+
+7. **Immutability**:
+   - Make arrays immutable or create immutable copies.
+
+Functions
+---------
+### Dimensionality Utilities
+- **to_ndim_1(arg, copy=False)**:
+  - Converts an array to 1D.
+
+- **to_ndim_2(arg, ndim_1_to_col=False, copy=False)**:
+  - Converts an array to 2D. Optionally reshapes 1D arrays into columns.
+
+- **row(*args)**:
+  - Creates a single-row matrix from the input.
+
+- **col(*args)**:
+  - Creates a single-column matrix from the input.
+
+- **matrix(ncol, *args)**:
+  - Creates a matrix with `ncol` columns from the input.
+
+- **matrix_of(nrow, ncol, val)**:
+  - Creates a matrix of dimensions `(nrow, ncol)` filled with `val`.
+
+### Symmetry Operations
+- **lower_to_symmetric(a, copy=False)**:
+  - Enforces symmetry by copying the lower triangular part to the upper part.
+
+- **upper_to_symmetric(a, copy=False)**:
+  - Enforces symmetry by copying the upper triangular part to the lower part.
+
+### Array Properties
+- **nrow(arg)**:
+  - Returns the number of rows in an array.
+
+- **ncol(arg)**:
+  - Returns the number of columns in an array.
+
+- **is_view_of(arg1, arg2)**:
+  - Checks if `arg1` is a view of `arg2`.
+
+- **are_views_of_same(arg1, arg2)**:
+  - Checks if `arg1` and `arg2` are views of the same base array.
+
+### Vectorized Operations
+- **vectorized(func)**:
+  - Decorates a function to indicate it supports vectorized operations.
+
+- **is_vectorized(func)**:
+  - Checks if a function is marked as vectorized.
+
+### Top-N Retention
+- **keep_top_n(arr, top_n)**:
+  - Retains the top `n` elements in a NumPy array, zeroing out the rest.
+
+### Immutability
+- **make_immutable(arg, allow_none=False)**:
+  - Makes an array immutable by disabling write access.
+
+- **immutable_copy_of(arg)**:
+  - Returns an immutable copy of the input array.
+
+### Other Utilities
+- **apply(func, arg, dtype='float64')**:
+  - Applies a function element-wise to an array.
+
+- **kron_sum(arg1, arg2)**:
+  - Computes the Kronecker sum of two matrices.
+
+- **vec(arg)**:
+  - Flattens an array into a column vector.
+
+- **unvec(arg, nrow)**:
+  - Reshapes a column vector back into a matrix with `nrow` rows.
+
+Dependencies
+------------
+- **NumPy**: For core array manipulations.
+- **thalesians.adiutor.checks**: For array validation and error handling.
+- **thalesians.adiutor.utils**: For batching and auxiliary utilities.
+
+Usage
+-----
+### Adjusting Dimensions
+    >>> import numpy as np
+    >>> from thalesians.adiutor.numpy_utils import to_ndim_1, to_ndim_2
+    >>> arr = np.array([[1, 2], [3, 4]])
+    >>> to_ndim_1(arr)
+    array([1, 2, 3, 4])
+    >>> to_ndim_2(arr)
+    array([[1, 2],
+           [3, 4]])
+
+### Enforcing Symmetry
+    >>> from thalesians.adiutor.numpy_utils import lower_to_symmetric
+    >>> arr = np.array([[1, 0], [2, 3]])
+    >>> lower_to_symmetric(arr)
+    array([[1, 2],
+           [2, 3]])
+
+### Retaining Top N Elements
+    >>> from thalesians.adiutor.numpy_utils import keep_top_n
+    >>> arr = np.array([1, 5, 3, 7, 2])
+    >>> keep_top_n(arr, 2)
+    array([0, 5, 0, 7, 0])
+
+Testing
+-------
+The module includes a `_test()` function for `doctest` validation.
+
+Notes
+-----
+- Immutability functions are particularly useful for preventing unintended modifications to shared data.
+- Top-N retention can be applied to both 1D and multi-dimensional arrays.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import datetime as dt
 import warnings
 

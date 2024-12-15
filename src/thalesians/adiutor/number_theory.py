@@ -1,3 +1,118 @@
+"""
+thalesians.adiutor.number_theory
+================================
+
+This module provides tools and utilities for exploring concepts in number theory. 
+It includes prime number generation, imbalance computations, base-specific digit operations, 
+and feature extraction for numerical analysis. The functions are designed to be efficient and 
+flexible, supporting individual numbers as well as iterables.
+
+Key Features
+------------
+1. **Prime Number Utilities**:
+   - Generate primes, prime pairs, and semi-primes.
+   - Explore relationships between primes, such as their imbalance.
+
+2. **Digit-Based Computations**:
+   - Extract digits of a number in any base.
+   - Compute the center of mass of digits.
+
+3. **Numerical Feature Extraction**:
+   - Extract detailed features of numbers across multiple bases, including statistics like mean, 
+     standard deviation, skewness, and kurtosis of their digits.
+
+4. **Imbalance Analysis**:
+   - Calculate imbalance metrics for pairs of numbers, with options for exact or fractional results.
+
+Classes
+-------
+- None
+
+Functions
+---------
+### Prime and Semi-Prime Generators
+- **primes(max_count=None)**:
+  - A generator for prime numbers. Optionally, limits the count of primes.
+
+- **prime_pairs(max_count=None)**:
+  - A generator for pairs of primes `(p, q)` such that `p >= q`.
+
+- **semi_primes(max_count=None)**:
+  - A generator for semi-primes (products of two primes).
+
+### Imbalance Computations
+- **imbalance(p, q)**:
+  - Computes the normalized imbalance between two numbers `p` and `q`.
+
+- **imbalance_lowest_terms(p, q)**:
+  - Returns the imbalance as a fraction in its lowest terms.
+
+- **imbnum(p, q)**:
+  - Returns the numerator of the imbalance fraction.
+
+- **imbden(p, q)**:
+  - Returns the denominator of the imbalance fraction.
+
+### Base-Specific Operations
+- **centre_of_mass(number, base=10)**:
+  - Computes the center of mass of non-zero digits in a number's representation.
+
+- **digits(number, base=10)**:
+  - Extracts the digits of a number in a given base.
+
+### Feature Extraction
+- **features(number, min_base=2, max_base=30)**:
+  - Extracts statistical and structural features of a number across multiple bases.
+
+Internal Helper Functions
+-------------------------
+- **_features_number(number, min_base, max_base)**:
+  - Computes features for a single number.
+
+- **_features_iterable(iterable, min_base, max_base)**:
+  - Computes features for an iterable of numbers.
+
+Dependencies
+------------
+- **fractions**: For exact fractional imbalance calculations.
+- **numpy**: For digit-based computations and statistical measures.
+- **scipy.stats**: For advanced statistics like skewness and kurtosis.
+- **sympy**: For efficient primality testing.
+
+Usage
+-----
+### Generating Primes
+    >>> prime_gen = primes(max_count=5)
+    >>> list(prime_gen)
+    [2, 3, 5, 7, 11]
+
+### Computing Imbalance
+    >>> imbalance(5, 7)
+    0.16666666666666666
+
+### Extracting Features
+    >>> features(123, min_base=2, max_base=10)
+    {'number': 123.0, 'normalized_modulo_2': 0.5, 'number_of_digits_2': 7.0, ...}
+
+### Center of Mass
+    >>> centre_of_mass(123, base=10)
+    1.0
+
+Testing
+-------
+The module includes a `_test()` function for `doctest` validation.
+
+Notes
+-----
+- Feature extraction involves statistical analysis of digit distributions across multiple bases, 
+  making it useful for numerical research or exploratory data analysis.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import fractions
 import logging
 

@@ -10,6 +10,11 @@ hold. Those functions that start with `check_` return their argument if a given 
 
 While this module is useful for checking whether (or asserting that) an argument is of a given type, the `conversions`
 module is useful for converting from one type to another.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
 """
 
 import collections.abc

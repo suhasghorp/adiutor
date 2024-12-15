@@ -1,3 +1,102 @@
+"""
+thalesians.adiutor.times
+========================
+
+This module provides a comprehensive suite of utilities for time and date manipulations, including timezone conversions, 
+temporal arithmetic, comparisons, and related operations. The utilities support working with Python's `datetime`, `time`, 
+and `date` objects while seamlessly integrating with `pytz` for timezone handling.
+
+Key Features
+------------
+1. **Timezone Conversions**:
+   - Functions to convert between UTC and various major timezones, including US Eastern, London, Paris, Tokyo, and others.
+
+2. **Temporal Arithmetic**:
+   - Add or subtract time deltas to/from `time`, `date`, or `datetime` objects with configurable overflow handling.
+
+3. **Temporal Comparisons**:
+   - Perform equality, inequality, and ordering comparisons on temporal data.
+
+4. **Miscellaneous Utilities**:
+   - Get the first day of the week for a given date.
+   - Handle iterable and scalar temporal data with consistency.
+
+Constants
+---------
+This module imports and re-exports constants from `thalesians.adiutor.time_consts` for convenient access to time unit 
+conversion factors and predefined `datetime.timedelta` objects.
+
+Timezones
+---------
+Predefined `pytz.timezone` objects for common locations:
+- `_us_eastern` (US/Eastern)
+- `_london` (Europe/London)
+- `_paris` (Europe/Paris)
+- `_tokyo` (Asia/Tokyo)
+- ...and many others.
+
+Functions
+---------
+### Timezone Conversion
+- **`utc_to_tz(datetime, tz)`**: Convert UTC `datetime` to a target timezone.
+- **`tz_to_utc(datetime, tz)`**: Convert a timezone-aware `datetime` to UTC.
+- Predefined functions for specific timezones, e.g., `utc_to_london`, `london_to_utc`.
+
+### Temporal Arithmetic
+- **`time_plus_timedelta(time, timedelta, on_overflow='raise')`**:
+  - Adds a `timedelta` to a `time` object. Handles overflow with configurable options (`raise`, `allow`, `truncate`).
+- **`plus_timedelta(x, timedelta, on_overflow='raise')`**:
+  - Adds a `timedelta` to a `time`, `date`, or `datetime`.
+
+### Temporal Comparisons
+- **`temporal_cmp(x, y)`**: General comparison for temporal objects.
+- **`temporal_eq`, `temporal_ne`, `temporal_lt`, `temporal_le`, `temporal_gt`, `temporal_ge`**:
+  - Specific comparison functions for equality, inequality, and ordering.
+
+### Week Utilities
+- **`first_day_of_week(date)`**:
+  - Returns the first day of the week for the given date.
+
+Usage
+-----
+### Timezone Conversion
+    >>> from thalesians.adiutor.times import utc_to_london
+    >>> import datetime as dt
+    >>> utc_now = dt.datetime.utcnow()
+    >>> london_now = utc_to_london(utc_now)
+    >>> print(f"London time: {london_now}")
+
+### Temporal Arithmetic
+    >>> from thalesians.adiutor.times import plus_timedelta, ONE_DAY
+    >>> from datetime import datetime
+    >>> today = datetime.now().date()
+    >>> tomorrow = plus_timedelta(today, ONE_DAY)
+    >>> print(f"Tomorrow's date: {tomorrow}")
+
+### Temporal Comparison
+    >>> from thalesians.adiutor.times import temporal_lt
+    >>> temporal_lt('2024-01-01', '2024-12-31')
+    True
+
+### First Day of the Week
+    >>> from thalesians.adiutor.times import first_day_of_week
+    >>> first_day_of_week('2024-12-15')
+    datetime.date(2024, 12, 9)
+
+Testing
+-------
+The module includes a `_test()` function for `doctest` validation.
+
+Notes
+-----
+- The module assumes `datetime` inputs are timezone-naive unless specified otherwise.
+- Temporal comparisons and arithmetic handle iterable inputs, providing consistent results for lists and arrays.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+"""
+
 import pytz
 
 import thalesians.adiutor.checks as checks

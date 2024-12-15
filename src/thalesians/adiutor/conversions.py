@@ -1,3 +1,132 @@
+"""
+thalesians.adiutor.conversions
+==============================
+
+This module provides robust conversion utilities for transforming between various data types, 
+including NumPy, Pandas, and Python native types. It focuses on conversions related to time 
+and numeric values, with additional support for string parsing and error handling.
+
+Key Features
+------------
+1. **Time Conversions**:
+   - Convert between NumPy `datetime64` and Python `datetime`.
+   - Handle Pandas `Timestamp` and `Timedelta` conversions.
+   - Convert time-related strings into Python `datetime`, `date`, or `time`.
+
+2. **Numeric Conversions**:
+   - Convert strings to integers or floats.
+   - Handle iterable inputs for bulk conversions.
+   - Support optional rounding and error tolerance for numeric conversions.
+
+3. **String Parsing**:
+   - Parse dates, times, and datetimes from strings using flexible formats.
+   - Support multiple formats and robust error handling with customizable defaults.
+
+4. **Utilities for Plotting**:
+   - Convert various time and numeric types to plottable values.
+
+Dependencies
+------------
+- **NumPy**: For `datetime64` and `timedelta64` handling.
+- **Pandas**: For `Timestamp` and `Timedelta` handling.
+- **thalesians.adiutor.checks**: Utility functions for type and iterable checks.
+- **thalesians.adiutor.time_consts**: Time constants for granular conversions (e.g., hours, minutes).
+- **thalesians.adiutor.utils**: General utilities for common operations.
+
+Functions
+---------
+### Time Conversions
+- **numpy_datetime64_to_python_datetime(x, allow_none=False)**:
+  - Converts NumPy `datetime64` to Python `datetime`, with optional handling for `None`.
+
+- **pandas_timestamp_to_python_datetime(x, allow_none=False)**:
+  - Converts Pandas `Timestamp` to Python `datetime`.
+
+- **numpy_timedelta64_to_python_timedelta(x, allow_none=False)**:
+  - Converts NumPy `timedelta64` to Python `timedelta`.
+
+- **numpy_timedelta64_to_python_time(x, allow_none=False)**:
+  - Converts NumPy `timedelta64` to Python `time`.
+
+- **pandas_timedelta_to_python_timedelta(x, allow_none=False)**:
+  - Converts Pandas `Timedelta` to Python `timedelta`.
+
+- **to_python_date(x, allow_datetimes=True, allow_none=False, *args, **kwargs)**:
+  - Converts input to Python `date`, optionally handling `datetime` and iterable inputs.
+
+- **to_python_time(x, allow_datetimes=True, allow_none=False, *args, **kwargs)**:
+  - Converts input to Python `time`, with support for `datetime` and `timedelta`.
+
+- **to_python_datetime(x, allow_dates=True, date_for_times=None, allow_none=False, *args, **kwargs)**:
+  - Converts input to Python `datetime`, with support for `date`, `time`, and iterables.
+
+- **to_python_timedelta(x, allow_none=False)**:
+  - Converts input to Python `timedelta`, handling NumPy and Pandas formats.
+
+### Numeric Conversions
+- **to_python_int(x, allow_none=False, allow_floats=False, *args, **kwargs)**:
+  - Converts input to an integer, optionally allowing floats or handling strings.
+
+- **to_python_float(x, allow_none=False, allow_ints=False, *args, **kwargs)**:
+  - Converts input to a float, optionally handling integers or strings.
+
+### String Parsing
+- **str_to_date(s, date_format, none_values, none_result, raise_value_error=True)**:
+  - Parses a string into a Python `date` using specified formats.
+
+- **str_to_time(s, time_format, none_values, none_result, raise_value_error=True)**:
+  - Parses a string into a Python `time` using specified formats.
+
+- **str_to_datetime(s, datetime_format, none_values, none_result, raise_value_error=True)**:
+  - Parses a string into a Python `datetime` using specified formats.
+
+- **strs_to_date, strs_to_time, strs_to_datetime**:
+  - Bulk parsing functions for lists of strings.
+
+### General Utilities
+- **to_plottable_value(x, *args, **kwargs)**:
+  - Converts input to a plottable value, prioritizing `datetime`, `date`, or `time`.
+
+Constants
+---------
+- **default_date_formats**:
+  - Common date formats for parsing (e.g., `"%Y-%m-%d"`, `"%Y%m%d"`).
+
+- **default_time_formats**:
+  - Common time formats for parsing (e.g., `"%H:%M:%S"`, `"%H:%M"`).
+
+- **default_datetime_formats**:
+  - Combined date-time formats for parsing (e.g., `"%Y-%m-%d %H:%M:%S"`).
+
+Usage
+-----
+Converting NumPy `datetime64` to Python `datetime`:
+    >>> import numpy as np
+    >>> numpy_datetime64_to_python_datetime(np.datetime64('2023-12-15T10:30'))
+    datetime.datetime(2023, 12, 15, 10, 30)
+
+Parsing a string to `datetime`:
+    >>> str_to_datetime("2023-12-15 10:30:00", datetime_format=["%Y-%m-%d %H:%M:%S"])
+    datetime.datetime(2023, 12, 15, 10, 30)
+
+Handling iterables:
+    >>> to_python_date(["2023-12-15", "2023-12-16"])
+    [datetime.date(2023, 12, 15), datetime.date(2023, 12, 16)]
+
+Converting to a plottable value:
+    >>> to_plottable_value(np.datetime64('2023-12-15T10:30'))
+    datetime.datetime(2023, 12, 15, 10, 30)
+
+Testing
+-------
+The module includes a `_test()` function for `doctest` validation.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import datetime as dt
 
 import thalesians.adiutor.checks as checks

@@ -1,3 +1,72 @@
+"""
+thalesians.adiutor.stats
+========================
+
+This module provides tools and utilities for statistical computations, focusing on covariance, correlation, and volatility 
+matrix operations, as well as online statistical calculations. The functions and classes are designed to be efficient, 
+robust, and flexible, catering to applications in quantitative finance, risk modeling, and data analysis.
+
+Key Features
+------------
+1. **Covariance and Volatility Matrix Operations**:
+    - Create covariance matrices from standard deviations and correlations.
+    - Convert correlation matrices to covariance matrices.
+    - Compute Cholesky decompositions and volatility matrices.
+
+2. **Online Statistics Calculator**:
+    - Incrementally compute statistics (mean, variance, standard deviation, etc.) for streaming data.
+    - Designed for dynamic updates without storing the entire dataset.
+
+3. **Utility Integrations**:
+    - Leverages utilities from `thalesians.adiutor.numpy_utils` and `thalesians.adiutor.utils` for robust matrix handling.
+
+Functions
+---------
+- `make_cov_2d(sd1, sd2, cor)`: Constructs a 2D covariance matrix from standard deviations and correlation.
+- `make_vol_2d(sd1, sd2, cor)`: Constructs a 2D volatility matrix (Cholesky-like decomposition).
+- `cov_to_vol(cov)`: Converts a covariance matrix to its Cholesky decomposition or element-wise square root.
+- `cor_to_cov(cors, vars=None, sds=None, copy=True)`: Converts a correlation matrix to a covariance matrix.
+- `vol_to_cov(vol)`: Computes a covariance matrix from a volatility matrix.
+- `cholesky_sqrt_2d(sd1, sd2, cor)`: Creates a 2D Cholesky-like decomposition matrix.
+
+Classes
+-------
+- `OnlineStatsCalculator`: A class for online computation of summary statistics. 
+    - Properties include: `mean`, `variance`, `standard deviation`, `RMS`, and more.
+    - Methods: `add(x)`, `add_all(xs)`, `reset(zero)`.
+
+Testing
+-------
+- The module includes a `_test()` function that uses Python's `doctest` module for validating functionality.
+
+Dependencies
+------------
+- `numpy`: For numerical computations.
+- `thalesians.adiutor.numpy_utils`: Provides utility functions for handling matrices.
+- `thalesians.adiutor.utils`: Includes specialized utilities for handling custom array types like `DiagonalArray` and `SubdiagonalArray`.
+
+Examples
+--------
+Creating a covariance matrix from standard deviations and correlation:
+    >>> make_cov_2d(0.2, 0.3, 0.5)
+    array([[0.04 , 0.03 ],
+           [0.03 , 0.09 ]])
+
+Using the `OnlineStatsCalculator` for streaming updates:
+    >>> calc = OnlineStatsCalculator()
+    >>> calc.add(10)
+    >>> calc.add(20)
+    >>> calc.mean
+    15.0
+    >>> calc.var
+    50.0
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import numpy as np
 
 import thalesians.adiutor.numpy_utils as npu

@@ -1,3 +1,123 @@
+"""
+thalesians.adiutor.randomness
+=============================
+
+This module provides utilities for generating random numbers and controlling random states for reproducibility. 
+It is built on top of NumPy's random module and extends it with custom functionality, such as multivariate 
+lognormal distributions, global seed setting, and compatibility with other libraries like TensorFlow and PyTorch.
+
+Key Features
+------------
+1. **Random State Management**:
+   - Global control of the random state for reproducibility.
+   - Ability to set global seeds across Python's random, NumPy, TensorFlow, and PyTorch.
+
+2. **Distribution Sampling**:
+   - Sample from a wide range of distributions, including common (e.g., normal, uniform) and specialized 
+     (e.g., multivariate normal, beta).
+
+3. **Custom Implementations**:
+   - Multivariate lognormal sampling with user-defined parameters.
+
+4. **Utility Functions**:
+   - Permutation, shuffle, and sampling from a set of values.
+
+Global Random State
+-------------------
+The module manages a global random state to ensure reproducibility across all random number generation functions. 
+This is achieved using the `random_state()` function, which initializes or retrieves the global state.
+
+Functions
+---------
+### Random State Management
+- **random_state(random_state=None, force=False)**:
+  - Retrieves or sets the global random state. Ensures a single process-wide state unless forced.
+
+- **set_global_seed(seed)**:
+  - Sets a global random seed for Python's random module, NumPy, TensorFlow, and PyTorch.
+
+### Distribution Sampling
+- Common distributions:
+  - **normal(loc=0., scale=1., size=None)**: Sample from a normal distribution.
+  - **uniform(low=0., high=1., size=None)**: Sample from a uniform distribution.
+  - **beta(a, b, size=None)**: Sample from a beta distribution.
+  - **gamma(shape, scale=1., size=None)**: Sample from a gamma distribution.
+  - **binomial(n, p, size=None)**: Sample from a binomial distribution.
+  - **poisson(lam=1., size=None)**: Sample from a Poisson distribution.
+
+- Multivariate distributions:
+  - **multivariate_normal(mean, cov, size=None, ndim=None)**: Sample from a multivariate normal distribution.
+  - **multivariate_lognormal(mean_of_log, cov_of_log, size=None, ndim=None)**: Sample from a multivariate lognormal distribution.
+
+- Specialized distributions:
+  - **logseries(p, size=None)**: Sample from a logarithmic series distribution.
+  - **pareto(a, size=None)**: Sample from a Pareto distribution.
+  - **weibull(a, size=None)**: Sample from a Weibull distribution.
+  - **triangular(left, mode, right, size=None)**: Sample from a triangular distribution.
+
+### Utility Functions
+- **shuffle(x)**:
+  - Shuffle an array or list in-place.
+
+- **permutation(x)**:
+  - Return a random permutation of a sequence or range.
+
+- **choice(a, size=None, replace=True, p=None)**:
+  - Randomly select elements from a sequence with or without replacement.
+
+- **random_sample(size=None)**:
+  - Generate random samples from a uniform distribution over [0, 1).
+
+Dependencies
+------------
+- **NumPy**: For core random number generation and array operations.
+- **TensorFlow**: For setting random seeds in TensorFlow models.
+- **PyTorch**: For setting random seeds in PyTorch models.
+- **Python random module**: For global seed setting.
+
+Usage
+-----
+### Setting a Global Seed
+    >>> from thalesians.adiutor.randomness import set_global_seed
+    >>> set_global_seed(42)  # Ensures reproducibility across all libraries
+
+### Sampling from a Normal Distribution
+    >>> from thalesians.adiutor.randomness import normal
+    >>> normal(loc=0, scale=1, size=5)
+    array([ 0.49671415, -0.1382643 ,  0.64768854,  1.52302986, -0.23415337])
+
+### Sampling from a Multivariate Normal Distribution
+    >>> from thalesians.adiutor.randomness import multivariate_normal
+    >>> mean = [0, 0]
+    >>> cov = [[1, 0], [0, 1]]  # Identity covariance matrix
+    >>> multivariate_normal(mean, cov, size=3)
+    array([[ 0.24196227, -1.91328024],
+           [-1.72491783, -0.56228753],
+           [-1.01283112,  0.31424733]])
+
+### Shuffling an Array
+    >>> from thalesians.adiutor.randomness import shuffle
+    >>> arr = [1, 2, 3, 4, 5]
+    >>> shuffle(arr)
+    >>> arr
+    [2, 1, 4, 5, 3]  # Example output (randomized)
+
+Testing
+-------
+The module includes a `_test()` function for `doctest` validation.
+
+Notes
+-----
+- The global random state ensures consistent results for the same seed, making this module ideal for simulations and 
+  experiments requiring reproducibility.
+- The `multivariate_lognormal` function offers a more flexible implementation than NumPy's default lognormal distribution.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import datetime as dt
 import random
 

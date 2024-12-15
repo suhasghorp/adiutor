@@ -1,5 +1,93 @@
-# TODO Write a proper comment here
-# Based on http://stackoverflow.com/questions/12151182/python-precondition-postcondition-for-member-function-how
+"""
+thalesians.adiutor.conditions
+=============================
+
+This module provides decorators to enforce preconditions and postconditions on functions and methods. 
+Preconditions validate the input arguments of a function before execution, while postconditions validate 
+the output after execution. These decorators are particularly useful for ensuring that a function adheres 
+to its contract in terms of input-output relationships, promoting reliability and robustness in the code.
+
+Key Features
+------------
+1. **Preconditions**:
+   - Verify that function inputs meet specific criteria before execution.
+   - Automatically raise errors if inputs are invalid, with customizable messages and levels.
+
+2. **Postconditions**:
+   - Verify that function outputs meet specific criteria after execution.
+   - Automatically raise errors if outputs are invalid, with customizable messages and levels.
+
+3. **Flexible Configuration**:
+   - Allows fine-grained control over which checks (preconditions, postconditions, or both) are enforced, 
+     based on configurable levels (`our_config.MIN_PRECONDITION_LEVEL` and `our_config.MIN_POSTCONDITION_LEVEL`).
+
+Functions
+---------
+- **conditions(pre=None, post=None, message='Condition violated', level=1)**:
+   - A decorator that enforces both preconditions and postconditions on a function.
+   - `pre`: A callable that evaluates a condition on input arguments.
+   - `post`: A callable that evaluates a condition on the return value.
+   - `message`: Customizable error message for violations.
+   - `level`: The enforcement level, allowing checks to be skipped based on configuration.
+
+- **precondition(check, message='Precondition violated', level=1)**:
+   - A decorator that enforces a precondition on a function.
+
+- **postcondition(check, message='Postcondition violated', level=1)**:
+   - A decorator that enforces a postcondition on a function.
+
+Usage
+-----
+### Enforcing Preconditions and Postconditions
+Example usage of `conditions` to ensure function contract compliance:
+
+    >>> from thalesians.adiutor.conditions import conditions
+    >>> @conditions(pre=lambda x: x > 0, post=lambda retval: retval % 2 == 0, message="Invalid condition")
+    ... def double_even(x):
+    ...     return x * 2
+    ...
+    >>> double_even(5)
+    Traceback (most recent call last):
+        ...
+    AssertionError: Invalid condition
+
+### Using Precondition or Postcondition Separately
+Enforcing only a precondition:
+    >>> from thalesians.adiutor.conditions import precondition
+    >>> @precondition(lambda x: x > 0, message="Input must be positive")
+    ... def square(x):
+    ...     return x ** 2
+    ...
+    >>> square(-2)
+    Traceback (most recent call last):
+        ...
+    AssertionError: Input must be positive
+
+Enforcing only a postcondition:
+    >>> from thalesians.adiutor.conditions import postcondition
+    >>> @postcondition(lambda retval: retval > 0, message="Result must be positive")
+    ... def decrement(x):
+    ...     return x - 1
+    ...
+    >>> decrement(0)
+    Traceback (most recent call last):
+        ...
+    AssertionError: Result must be positive
+
+Dependencies
+------------
+- **thalesians.adiutor.checks**: Provides the `check` function for evaluating conditions.
+- **thalesians.adiutor.config**: Configuration options for controlling the minimum enforcement level of preconditions and postconditions.
+
+Testing
+-------
+The module includes a `_test()` function for testing with `doctest`.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
 
 import functools
 

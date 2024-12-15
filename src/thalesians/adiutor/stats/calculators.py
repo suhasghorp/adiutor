@@ -1,3 +1,115 @@
+"""
+thalesians.adiutor.stats.calculators
+====================================
+
+This module implements a collection of incremental calculators for statistical computations. 
+It is designed to support dynamic, streaming data analysis while minimizing memory usage. 
+The calculators are highly extensible and cater to various statistical needs, including 
+basic averages, moments, variances, covariances, and more advanced metrics like skewness, 
+kurtosis, and quantiles.
+
+Key Features
+------------
+1. **Incremental Calculators**:
+   - Support for online computation of statistics without storing the entire dataset.
+   - Efficient algorithms for streaming updates.
+
+2. **Specialized Calculators**:
+   - Central and standardized moments.
+   - Geometric and harmonic means.
+   - Variance, standard deviation, and covariance.
+   - Quantiles, medians, and modes.
+
+3. **Auto-Resetting and Window-Based Calculators**:
+   - Auto-resetting calculators that adapt to changepoints in data streams.
+   - Window-based calculators for rolling or fixed-size window statistics.
+
+4. **Extensibility**:
+   - Designed for easy integration with custom calculators and statistical methods.
+
+Classes
+-------
+- **AbstractCalculator**:
+  - Base class for all calculators, defining the structure and essential methods.
+- **AbstractIncrementalCalculator**:
+  - Base class for calculators that compute statistics incrementally.
+- **AutoResettingIncrementalCalculator**:
+  - Automatically resets calculations when a statistical changepoint is detected.
+- **MomentIncrementalCalculator**:
+  - Computes moments of any order.
+- **CentralMomentIncrementalCalculator**:
+  - Computes central moments (e.g., variance as the 2nd central moment).
+- **StandardizedMomentIncrementalCalculator**:
+  - Computes standardized moments (e.g., skewness, kurtosis).
+- **ArithmeticMeanIncrementalCalculator**:
+  - Calculates the arithmetic mean incrementally.
+- **GeometricMeanIncrementalCalculator**:
+  - Calculates the geometric mean incrementally.
+- **HarmonicMeanIncrementalCalculator**:
+  - Calculates the harmonic mean incrementally.
+- **VarianceIncrementalCalculator**:
+  - Calculates variance, optionally supporting semi-variance.
+- **StandardDeviationIncrementalCalculator**:
+  - Calculates the standard deviation based on variance.
+- **CovarianceIncrementalCalculator**:
+  - Calculates covariance incrementally for paired data.
+- **ControlVariateIncrementalCalculator**:
+  - Implements control variate adjustments for reducing variance.
+- **WindowCalculator**:
+  - Calculates statistics within a fixed or rolling window.
+
+Functions
+---------
+- **make_skewness_calculator(window_size=None)**:
+  - Creates a skewness calculator, optionally with a rolling window.
+- **make_kurtosis_calculator(window_size=None)**:
+  - Creates a kurtosis calculator, optionally with a rolling window.
+- **make_quantile_calculator(quantile=0.5, window_size=None)**:
+  - Creates a quantile calculator, optionally with a rolling window.
+- **make_median_calculator(window_size=None)**:
+  - Creates a median calculator, optionally with a rolling window.
+- **make_mode_calculator(decimals=None, window_size=None)**:
+  - Creates a mode calculator, optionally rounding to the specified decimal places.
+- **make_median_absolute_deviation_calculator(window_size=None, power=1, factor=1.4826)**:
+  - Creates a calculator for the median absolute deviation.
+
+Dependencies
+------------
+- **NumPy**: For numerical computations and array operations.
+- **SciPy**: For advanced statistical operations (e.g., mode calculation).
+- **changepoint_online** (optional): For detecting changepoints in auto-resetting calculators.
+
+Examples
+--------
+Basic Usage:
+    >>> calc = ArithmeticMeanIncrementalCalculator()
+    >>> calc.append(10)
+    >>> calc.append(20)
+    >>> calc.get_statistic()
+    15.0
+
+Auto-Resetting Calculator:
+    >>> from changepoint_online import MDFocus, MDGaussian
+    >>> changepoint_detector = MDFocus(MDGaussian())
+    >>> calc = AutoResettingIncrementalCalculator(threshold=0.1, changepoint_detector=changepoint_detector)
+    >>> for x in [10, 15, 20]:
+    ...     calc.append(x)
+    >>> calc.get_statistic()
+    15.0
+
+Rolling Window Median:
+    >>> calc = make_median_calculator(window_size=3)
+    >>> for x in [1, 2, 3, 4]:
+    ...     calc.append(x)
+    >>> calc.get_statistic()
+    3.0
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import copy
 import math
 

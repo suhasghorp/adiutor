@@ -1,3 +1,68 @@
+"""
+thalesians.adiutor.utils
+
+The `thalesians.adiutor.utils` module provides a diverse set of utility functions and classes 
+for handling arrays, collections, sequences, and intervals. It also includes several mathematical 
+utilities, iterable transformations, and data manipulation tools, enhancing productivity for 
+numerical and algorithmic operations.
+
+Key Features
+------------
+
+General Utilities:
+- `shift(xs, n)`: Shifts elements of a NumPy array `xs` by `n` positions.
+- `slugify(value, allow_unicode=False)`: Converts a string into a slug format, useful for 
+  generating file names or URLs.
+- `is_notebook()`: Detects whether the code is executed in a Jupyter notebook or another environment.
+- `sequence_eq(sequence1, sequence2)`: Compares two sequences for element-wise equality.
+- `cmp(x, y)`: General comparison function for numeric values.
+
+Collection and Iterable Utilities:
+- `prepend(collection, to_prepend, in_place=False)`: Prepends elements to a collection.
+- `pad_on_left`, `pad_on_right`: Adds padding to collections either on the left or right side.
+- `trim_on_left`, `trim_on_right`: Trims collections to a specified size from either side.
+- `batch(size, iterable)`: Splits an iterable into fixed-sized batches.
+- `peek(iterable, size=1)`: Retrieves the first `size` elements from an iterable without consuming it.
+
+Interval and Bracketing Utilities:
+- `intervals(start, end, delta, intervals_right_closed=False)`: Generates a list of intervals 
+  between `start` and `end` with a specified `delta`.
+- `bracket(iterable, origin, interval_size, ...)`: Groups elements of an iterable into brackets 
+  based on their values and intervals.
+
+Specialized Data Structures:
+- `FlatStoredArray`: Base class for flat-stored array-like structures with custom indexing mechanisms.
+- `DiagonalArray`: A specialized storage class for representing and manipulating triangular matrices.
+- `SubdiagonalArray`: Similar to `DiagonalArray`, but focuses on subdiagonal elements.
+
+Example Usage
+-------------
+
+Interval Generation:
+    >>> from thalesians.adiutor.utils import intervals
+    >>> interval_list = intervals(start=0, end=10, delta=3)
+    >>> print(interval_list)
+    [[0, 3), [3, 6), [6, 9), [9, 10)]
+
+Batched Iterables:
+    >>> from thalesians.adiutor.utils import batch
+    >>> batches = batch(3, range(10))
+    >>> print(batches)
+    [range(0, 3), range(3, 6), range(6, 9), range(9, 10)]
+
+Custom Storage:
+    >>> from thalesians.adiutor.utils import DiagonalArray
+    >>> diag = DiagonalArray(3)
+    >>> diag[0, 0] = 1
+    >>> diag[1, 0], diag[1, 1] = 2, 3
+    >>> print(diag.to_numpy_array())
+
+Testing
+-------
+The module includes a `_test()` function leveraging `doctest` for validating behavior and examples.
+Run the script directly to execute these tests.
+"""
+
 import copy
 import itertools
 import math

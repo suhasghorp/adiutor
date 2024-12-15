@@ -1,3 +1,142 @@
+"""
+thalesians.adiutor.pandas_utils
+===============================
+
+This module provides a set of utilities and helper functions for working with pandas DataFrames. 
+The functions support common operations like filtering, feature detection, column type inference, 
+and temporal data aggregation. They are designed to streamline the workflow when processing tabular data.
+
+Key Features
+------------
+1. **Predicate-Based Filtering**:
+   - Flexible filtering functions like `eq`, `lt`, `gt`, `le`, `ge`, and `isin` for DataFrame columns.
+   - Combine predicates using `apply_predicates` for advanced filtering.
+
+2. **Column Type Detection and Conversion**:
+   - Automatically infer column types using `detect_df_column_types`.
+   - Convert columns to desired types with `convert_df_columns`.
+
+3. **Temporal Aggregation**:
+   - Combine date and time columns.
+   - Sparse temporal data using `sparsen` with customizable bucketing and aggregation.
+
+4. **Feature Detection**:
+   - Detect categorical columns.
+   - Identify columns of specific types (e.g., int, float, datetime).
+
+5. **DataFrame Utilities**:
+   - Load zipped CSV files efficiently with chunking.
+   - Apply preprocessing and postprocessing functions during data loading.
+
+Functions
+---------
+### Filtering
+- **eq(column, value, fun=None)**:
+  - Returns a predicate for rows where `column == value`.
+
+- **lt(column, value, fun=None)**, **gt(column, value, fun=None)**, **le(column, value, fun=None)**, **ge(column, value, fun=None)**:
+  - Return predicates for rows where `column` is less than, greater than, less than or equal, or greater than or equal to `value`.
+
+- **isin(column, values, fun=None)**:
+  - Returns a predicate for rows where `column` is in `values`.
+
+- **apply_predicates(df, predicates)**:
+  - Filters rows of `df` based on a list of predicates.
+
+- **apply_funs(df, funs)**:
+  - Applies a list of functions to the DataFrame.
+
+### Column Type Detection and Conversion
+- **detect_df_column_types(df, none_values, min_success_rate, convert=False, in_place=False, return_df=False)**:
+  - Detects column types in a DataFrame, optionally converting them.
+
+- **convert_df_columns(df, conversions, in_place=False)**:
+  - Converts specified columns in a DataFrame using custom functions.
+
+- **detect_df_categorical_columns(df)**:
+  - Detects columns with categorical data.
+
+### Temporal Aggregation
+- **combine_date_time(df, date_column, time_column)**:
+  - Combines date and time columns into a single datetime column.
+
+- **sparsen(df, ...)**:
+  - Reduces the density of temporal data by aggregating over specified buckets.
+
+### Column Utilities
+- **get_column_types(df)**:
+  - Returns the inferred types of columns in a DataFrame.
+
+- **get_df_columns_of_type(df, types)**:
+  - Returns a list of columns matching specified types.
+
+- **get_df_int_columns(df)**, **get_df_float_columns(df)**, **get_df_time_columns(df)**, **get_df_date_columns(df)**, **get_df_datetime_columns(df)**:
+  - Return lists of columns matching specific types (e.g., int, float, datetime).
+
+### DataFrame Utilities
+- **load_df_from_zipped_csv(path, predicates, pre_funs, post_funs, **kwargs)**:
+  - Loads a DataFrame from a zipped CSV file, applying predicates and preprocessing/postprocessing functions.
+
+- **first(x)**, **last(x)**:
+  - Return the first or last value of a series or DataFrame column.
+
+- **mean_or_first(x)**, **mean_or_last(x)**:
+  - Return the mean of a column, or the first/last value if the mean cannot be computed.
+
+Dependencies
+------------
+- **pandas**: For DataFrame manipulations.
+- **numpy**: For numerical computations.
+- **thalesians.adiutor.checks**: For validation utilities.
+- **thalesians.adiutor.conversions**: For type conversions.
+- **thalesians.adiutor.times**: For temporal operations.
+- **thalesians.adiutor.utils**: For auxiliary operations.
+
+Usage
+-----
+### Filtering Rows
+    >>> import pandas as pd
+    >>> from thalesians.adiutor.pandas_utils import apply_predicates, eq
+    >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+    >>> predicates = [eq('A', 2)]
+    >>> apply_predicates(df, predicates)
+       A  B
+    1  2  5
+
+### Detecting Column Types
+    >>> from thalesians.adiutor.pandas_utils import detect_df_column_types
+    >>> df = pd.DataFrame({'A': ['1', '2', '3'], 'B': ['2023-01-01', '2023-01-02', '2023-01-03']})
+    >>> detect_df_column_types(df, convert=True, return_df=True)
+    ({'A': <class 'int'>, 'B': <class 'datetime.datetime'>},
+         A          B
+    0  1 2023-01-01
+    1  2 2023-01-02
+    2  3 2023-01-03)
+
+### Combining Date and Time
+    >>> from thalesians.adiutor.pandas_utils import combine_date_time
+    >>> df = pd.DataFrame({'Date': ['2023-01-01', '2023-01-02'], 'Time': ['12:00:00', '13:00:00']})
+    >>> df['Combined'] = combine_date_time(df, 'Date', 'Time')
+    >>> df
+            Date      Time            Combined
+    0  2023-01-01  12:00:00 2023-01-01 12:00:00
+    1  2023-01-02  13:00:00 2023-01-02 13:00:00
+
+Testing
+-------
+The module includes a `_test()` function for `doctest` validation.
+
+Notes
+-----
+- The `sparsen` function supports advanced temporal aggregation with extensive customization.
+- Loading large zipped CSV files is optimized using chunking.
+
+License
+-------
+This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
+"""
+
 import collections as col
 import datetime as dt
 
