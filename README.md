@@ -7,3 +7,13 @@
 - Paul Alexander Bilokon <paul@thalesians.com>
 - Abir Sridi <abir.sridi@thalesians.com>
 
+## Installation
+
+<pre>
+pip install thalesians.adiutor
+</pre>
+
+## Documentation and tutorials
+
+See https://github.com/thalesians/adiutor/wiki
+
