@@ -145,7 +145,7 @@ import pandas as pd
 
 import thalesians.adiutor.checks as checks
 import thalesians.adiutor.conversions as conv
-import thalesians.adiutor.times as thailibtimes
+import thalesians.adiutor.times as our_times
 import thalesians.adiutor.utils as utils
 
 eq = lambda column, value, fun=None: \
@@ -341,7 +341,7 @@ def sparsen(df, aggregator=mean_or_last,
     checks.is_at_least_one_not_none(datetime, date, time)
     
     if bucket == 'date': bucket = lambda x: conv.to_python_date(x, allow_datetimes=True)
-    elif bucket == 'week': bucket = lambda x: thailibtimes.first_day_of_week(x)
+    elif bucket == 'week': bucket = lambda x: our_times.first_day_of_week(x)
     
     columns_to_exclude = set() if columns_to_exclude is None else set(columns_to_exclude)
     
@@ -414,26 +414,26 @@ def sparsen(df, aggregator=mean_or_last,
         
         if numeric_fix_points:
             if comparison == 'ge':
-                fix_point_indices = group_df.index[thailibtimes.temporal_ge(group_df['temporals'], fix_time)][0:fix_points]
+                fix_point_indices = group_df.index[our_times.temporal_ge(group_df['temporals'], fix_time)][0:fix_points]
             elif comparison == 'gt':
-                fix_point_indices = group_df.index[thailibtimes.temporal_gt(group_df['temporals'], fix_time)][0:fix_points]
+                fix_point_indices = group_df.index[our_times.temporal_gt(group_df['temporals'], fix_time)][0:fix_points]
             elif comparison == 'le':
-                fix_point_indices = group_df.index[thailibtimes.temporal_le(group_df['temporals'], fix_time)][-fix_points:]
+                fix_point_indices = group_df.index[our_times.temporal_le(group_df['temporals'], fix_time)][-fix_points:]
             else: # comparison == 'lt'
-                fix_point_indices = group_df.index[thailibtimes.temporal_lt(group_df['temporals'], fix_time)][-fix_points:]
+                fix_point_indices = group_df.index[our_times.temporal_lt(group_df['temporals'], fix_time)][-fix_points:]
         else:
             if comparison == 'ge':
-                fix_point_indices = group_df.index[(thailibtimes.temporal_ge(group_df['temporals'], fix_time)) & \
-                                                   (thailibtimes.temporal_le(group_df['temporals'], thailibtimes.plus_timedelta(fix_time, fix_points)))]
+                fix_point_indices = group_df.index[(our_times.temporal_ge(group_df['temporals'], fix_time)) & \
+                                                   (our_times.temporal_le(group_df['temporals'], our_times.plus_timedelta(fix_time, fix_points)))]
             elif comparison == 'gt':
-                fix_point_indices = group_df.index[(thailibtimes.temporal_gt(group_df['temporals'], fix_time)) & \
-                                                   (thailibtimes.temporal_le(group_df['temporals'], thailibtimes.plus_timedelta(fix_time, fix_points)))]
+                fix_point_indices = group_df.index[(our_times.temporal_gt(group_df['temporals'], fix_time)) & \
+                                                   (our_times.temporal_le(group_df['temporals'], our_times.plus_timedelta(fix_time, fix_points)))]
             elif comparison == 'le':
-                fix_point_indices = group_df.index[(thailibtimes.temporal_le(group_df['temporals'], fix_time)) & \
-                                                   (thailibtimes.temporal_ge(group_df['temporals'], thailibtimes.plus_timedelta(fix_time, -fix_points)))]
+                fix_point_indices = group_df.index[(our_times.temporal_le(group_df['temporals'], fix_time)) & \
+                                                   (our_times.temporal_ge(group_df['temporals'], our_times.plus_timedelta(fix_time, -fix_points)))]
             else: # comparison == 'lt':
-                fix_point_indices = group_df.index[(thailibtimes.temporal_lt(group_df['temporals'], fix_time)) & \
-                                                   (thailibtimes.temporal_ge(group_df['temporals'], thailibtimes.plus_timedelta(fix_time, -fix_points)))]
+                fix_point_indices = group_df.index[(our_times.temporal_lt(group_df['temporals'], fix_time)) & \
+                                                   (our_times.temporal_ge(group_df['temporals'], our_times.plus_timedelta(fix_time, -fix_points)))]
                 
         fix_point_limits_breached = set()
 
@@ -445,25 +445,25 @@ def sparsen(df, aggregator=mean_or_last,
             if checks.is_some_timedelta(min_min_fix_point_time):
                 the_min_min_fix_point_time = fix_time + min_min_fix_point_time if comparison in ('ge', 'gt') else fix_time - min_min_fix_point_time
             else: the_min_min_fix_point_time = min_min_fix_point_time
-            if thailibtimes.temporal_lt(min(grouping_df['temporals'].values[fix_point_indices]), the_min_min_fix_point_time):
+            if our_times.temporal_lt(min(grouping_df['temporals'].values[fix_point_indices]), the_min_min_fix_point_time):
                 fix_point_limits_breached.add('min_min_fix_point_time')
         if max_min_fix_point_time is not None:
             if checks.is_some_timedelta(max_min_fix_point_time):
                 the_max_min_fix_point_time = fix_time + max_min_fix_point_time if comparison in ('ge', 'gt') else fix_time - max_min_fix_point_time
             else: the_max_min_fix_point_time = max_min_fix_point_time
-            if thailibtimes.temporal_gt(min(grouping_df['temporals'].values[fix_point_indices]), the_max_min_fix_point_time):
+            if our_times.temporal_gt(min(grouping_df['temporals'].values[fix_point_indices]), the_max_min_fix_point_time):
                 fix_point_limits_breached.add('max_min_fix_point_time')
         if min_max_fix_point_time is not None:
             if checks.is_some_timedelta(min_max_fix_point_time):
                 the_min_max_fix_point_time = fix_time + min_max_fix_point_time if comparison in ('ge', 'gt') else fix_time - min_max_fix_point_time
             else: the_min_max_fix_point_time = min_max_fix_point_time
-            if thailibtimes.temporal_lt(max(grouping_df['temporals'].values[fix_point_indices]), the_min_max_fix_point_time):
+            if our_times.temporal_lt(max(grouping_df['temporals'].values[fix_point_indices]), the_min_max_fix_point_time):
                 fix_point_limits_breached.add('min_max_fix_point_time')
         if max_max_fix_point_time is not None:
             if checks.is_some_timedelta(max_max_fix_point_time):
                 the_max_max_fix_point_time = fix_time + max_max_fix_point_time if comparison in ('ge', 'gt') else fix_time - max_max_fix_point_time
             else: the_max_max_fix_point_time = max_max_fix_point_time
-            if thailibtimes.temporal_gt(max(grouping_df['temporals'].values[fix_point_indices]), the_max_max_fix_point_time):
+            if our_times.temporal_gt(max(grouping_df['temporals'].values[fix_point_indices]), the_max_max_fix_point_time):
                 fix_point_limits_breached.add('max_max_fix_point_time')
                 
         if len(fix_point_limits_breached) > 0:

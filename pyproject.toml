@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thalesians.adiutor"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
 	{ name="Paul Alexander Bilokon", email="paul@thalesians.com" },
 	{ name="Abir Sridi", email="abir.sridi@thalesians.com" },
@@ -18,7 +18,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "numpy>=2.2.0",
+    "numpy>=1.26.4",
     "pytz>=2024.2",
     "unidecode>=1.3.8",
     "pandas>=2.2.3",
