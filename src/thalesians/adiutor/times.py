@@ -95,6 +95,7 @@ Notes
 License
 -------
 This module is part of the `thalesians.adiutor` package. All rights reserved.
+See LICENSE for details.
 """
 
 import pytz

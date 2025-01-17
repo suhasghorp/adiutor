@@ -751,7 +751,7 @@ class DiagonalArray(FlatStoredArray):
         return res
     
     def to_numpy_array(self, fill=None, symmetric=False):
-        if fill is None: fill = np.NAN
+        if fill is None: fill = np.nan
         res = np.empty((self.__dim, self.__dim))
         idx = 0
         for i in range(self.__dim):

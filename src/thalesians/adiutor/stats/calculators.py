@@ -452,7 +452,7 @@ class VarianceIncrementalCalculator(AbstractIncrementalCalculator):
             self._statistic = self._statistic if np.isfinite(self._statistic) else product
 
     def get_statistic(self):
-        if self._count < 2: return np.NaN
+        if self._count < 2: return np.nan
         return self._statistic / (self._count - self._ddof)
 
     def reset(self):
@@ -537,7 +537,7 @@ class CovarianceIncrementalCalculator(AbstractIncrementalCalculator):
             self._statistic += delta1 * delta2
 
     def get_statistic(self):
-        if self._count < 2: return np.NaN
+        if self._count < 2: return np.nan
         return self._statistic / float(self._count - self._ddof)
 
     def reset(self):
