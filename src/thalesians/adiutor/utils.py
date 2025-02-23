@@ -744,7 +744,7 @@ class DiagonalArray(FlatStoredArray):
         elif isinstance(obj, SubdiagonalArray):
             res = DiagonalArray(obj.dim)
             for k, v in obj.items():
-                self[k] = v
+                res[k] = v
         else:
             res = DiagonalArray(cls.mindim(len(obj)))
             res.setall(obj)
@@ -919,7 +919,7 @@ class SubdiagonalArray(FlatStoredArray):
         elif isinstance(obj, DiagonalArray):
             res = SubdiagonalArray(obj.dim)
             for k, v in obj.items():
-                if k[0] != k[1]: self[k] = v
+                if k[0] != k[1]: res[k] = v
         else:
             res = SubdiagonalArray(cls.mindim(len(obj)))
             res.setall(obj)

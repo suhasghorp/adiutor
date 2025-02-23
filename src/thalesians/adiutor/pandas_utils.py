@@ -139,6 +139,8 @@ See LICENSE for details.
 
 import collections as col
 import datetime as dt
+import enum
+import zipfile
 
 import numpy as np
 import pandas as pd
@@ -147,6 +149,24 @@ import thalesians.adiutor.checks as checks
 import thalesians.adiutor.conversions as conv
 import thalesians.adiutor.times as our_times
 import thalesians.adiutor.utils as utils
+
+def read_csv(path, *args, path_to_archive=None, **kwargs):
+    result = None
+    if path_to_archive is not None:
+        with zipfile.ZipFile(path_to_archive) as z:
+            result = pd.read_csv(z.open(path), *args, **kwargs)
+    else:
+        result = pd.read_csv(path, *args, **kwargs)
+    return result
+
+def read_parquet(path, *args, path_to_archive=None, **kwargs):
+    result = None
+    if path_to_archive is not None:
+        with zipfile.ZipFile(path_to_archive) as z:
+            result = pd.read_parquet(z.open(path), *args, **kwargs)
+    else:
+        result = pd.read_parquet(path, *args, **kwargs)
+    return result
 
 eq = lambda column, value, fun=None: \
     (lambda df: (df[column] if fun is None else df[column].apply(fun)) == value)
@@ -176,7 +196,10 @@ def apply_funs(df, funs):
         if f is not None: df = f(df)
     return df
 
-def load_df_from_zipped_csv(path, predicates=[], pre_funs=[], post_funs=[], **kwargs):
+def load_df_from_zipped_csv(path, predicates=None, pre_funs=None, post_funs=None, **kwargs):
+    if predicates is None: predicates = []
+    if pre_funs is None: pre_funs = []
+    if post_funs is None: post_funs = []
     if 'iterator' not in kwargs: kwargs['iterator'] = True
     if 'chunksize' not in kwargs: kwargs['chunksize'] = 10000
     if 'compression' not in kwargs: kwargs['compression'] = 'zip'
@@ -486,7 +509,54 @@ def sparsen(df, aggregator=mean_or_last,
                 'fix_point_counts': fix_point_counts
             }
     else: return df
+    
+def augment_column_names(df, prefix='', suffix='', inplace=False):
+    if not inplace: df = df.copy()
+    df.columns = [f'{prefix}{column_name}{suffix}' for column_name in df.columns]
+    return df
 
+class IndexKind(enum.Enum):
+    INTERSECTION = 1
+    UNION = 2
+    INDIVIDUAL = 3
+    CUSTOM = 4
+    
+def intersection_index(dfs):
+    result = []
+    if len(dfs) >= 1:
+        result = dfs[0].index
+    if len(dfs) >= 2:
+        for df in dfs[1:]:
+            result = result.intersection(df.index)
+    return sorted(result)
+
+def union_index(dfs):
+    result = []
+    if len(dfs) >= 1:
+        result = dfs[0].index
+    if len(dfs) >= 2:
+        for df in dfs[1:]:
+            result = result.union(df.index)
+    return sorted(result)
+
+def align(dfs, index=None):
+    try:
+        if IndexKind.INTERSECTION == index: index = intersection_index(dfs)
+    except: pass
+    try:
+        if IndexKind.UNION == index: index = union_index(dfs)
+    except: pass
+    try:
+        if IndexKind.INDIVIDUAL == index: index = dfs[0].index
+    except: pass
+    if index is None: index = IndexKind.UNION
+    elif checks.is_int(index): index = dfs[index].index
+    else:
+        for df in dfs:
+            if index is df: index = df.index
+    aligned_dfs = [df.reindex(index, method='ffill') for df in dfs]
+    return pd.concat(aligned_dfs, axis=1)
+    
 def _test():
     import doctest
     doctest.testmod(verbose=False)

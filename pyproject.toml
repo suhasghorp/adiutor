@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thalesians.adiutor"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
 	{ name="Paul Alexander Bilokon", email="paul@thalesians.com" },
 	{ name="Abir Sridi", email="abir.sridi@thalesians.com" },
